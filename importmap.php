@@ -31,4 +31,10 @@ return [
     'immutable' => [
         'version' => '5.1.2',
     ],
+    'gsap' => [
+        'version' => '3.13.0',
+    ],
+    'aos' => [
+        'version' => '2.3.4',
+    ],
 ];

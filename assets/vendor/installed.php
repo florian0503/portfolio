@@ -40,4 +40,24 @@
     array (
     ),
   ),
+  'gsap' => 
+  array (
+    'version' => '3.13.0',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'aos' => 
+  array (
+    'version' => '2.3.4',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
 );
