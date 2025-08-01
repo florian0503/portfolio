@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ name }} - {{ title }}{% endblock %}
+
+{% block meta_description %}{{ description }}{% endblock %}
+
+{% block body %}
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>{{ name }}</h1>
+                <p class="subtitle">{{ title }}</p>
+                <p class="description">{{ description }}</p>
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn btn-primary">Voir mes projets</a>
+                    <a href="#contact" class="btn btn-outline">Me contacter</a>
+                </div>
+            </div>
+            <div class="scroll-indicator"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>À propos de <span class="gradient-text">moi</span></h2>
+                    <p>
+                        Développeur Full Stack passionné avec plusieurs années d'expérience dans la création 
+                        d'applications web modernes et performantes. Je maîtrise l'écosystème Symfony/PHP 
+                        ainsi que les technologies front-end les plus récentes.
+                    </p>
+                    <p>
+                        Mon approche allie créativité et rigueur technique pour livrer des solutions 
+                        qui dépassent les attentes. J'aime relever des défis complexes et transformer 
+                        des idées en applications fonctionnelles et élégantes.
+                    </p>
+                    <p>
+                        Toujours en veille technologique, je suis constamment à la recherche de nouvelles 
+                        façons d'améliorer mes compétences et d'adopter les meilleures pratiques du développement.
+                    </p>
+                    <a href="#contact" class="btn btn-gradient">Travaillons ensemble</a>
+                </div>
+                <div class="about-image">
+                    <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Mes <span class="gradient-text">compétences</span></h2>
+                <p>
+                    Voici un aperçu de mes compétences techniques acquises au fil des projets 
+                    et de mon expérience professionnelle.
+                </p>
+            </div>
+            <div class="skills-grid">
+                {% for skill in skills %}
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <h3>{{ skill.name }}</h3>
+                            <span class="skill-percentage">{{ skill.level }}%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress-width: {{ skill.level }}%"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Mes <span class="gradient-text">projets</span></h2>
+                <p>
+                    Découvrez quelques-uns de mes projets récents qui illustrent 
+                    mes compétences et ma passion pour le développement.
+                </p>
+            </div>
+            <div class="projects-grid">
+                {% for project in projects %}
+                    <div class="project-card">
+                        <div class="project-image">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="project-content">
+                            <h3>{{ project.title }}</h3>
+                            <p>{{ project.description }}</p>
+                            <div class="project-tech">
+                                {% for tech in project.technologies %}
+                                    <span>{{ tech }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="project-links">
+                                <a href="{{ project.github }}" target="_blank" class="github-link">
+                                    <i class="fab fa-github"></i> Code
+                                </a>
+                                <a href="{{ project.demo }}" target="_blank" class="demo-link">
+                                    <i class="fas fa-external-link-alt"></i> Démo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+        <div class="container">
+            <div class="contact-content">
+                <h2>Contactez-<span class="gradient-text">moi</span></h2>
+                <p>
+                    Une idée de projet ? Une opportunité ? N'hésitez pas à me contacter 
+                    pour discuter de vos besoins.
+                </p>
+                
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Nom</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Sujet</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-gradient">
+                            <i class="fas fa-paper-plane"></i> Envoyer le message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

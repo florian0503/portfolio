@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Portfolio - Développeur Full Stack{% endblock %}</title>
+        <meta name="description" content="{% block meta_description %}Portfolio de développeur Full Stack spécialisé en Symfony, PHP, JavaScript et technologies web modernes{% endblock %}">
+        
+        <!-- Favicon -->
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
+        
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        
+        <!-- Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-container">
+                    <a href="#home" class="logo">Portfolio</a>
+                    <ul class="nav-menu">
+                        <li><a href="#home">Accueil</a></li>
+                        <li><a href="#about">À propos</a></li>
+                        <li><a href="#skills">Compétences</a></li>
+                        <li><a href="#projects">Projets</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu">
+            <ul class="mobile-nav">
+                <li><a href="#home">Accueil</a></li>
+                <li><a href="#about">À propos</a></li>
+                <li><a href="#skills">Compétences</a></li>
+                <li><a href="#projects">Projets</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+
+        {% block body %}{% endblock %}
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; {{ "now"|date("Y") }} Portfolio. Développé avec ❤️ et Symfony</p>
+                <div class="social-links">
+                    <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="mailto:contact@portfolio.com"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

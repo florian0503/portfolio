@@ -1,0 +1,47 @@
+# Symfony framework cache and logs
+/var/cache/*
+/var/log/*
+!var/cache/.gitkeep
+!var/log/.gitkeep
+
+# Env files (except .env which is versioned)
+/.env.local
+/.env.local.php
+/.env.*.local
+
+# Build data
+/public/build/
+
+# Composer
+/vendor/
+
+# IDE files
+/.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# node_modules (if you use npm/yarn later)
+node_modules/
+
+# Temporary files
+*.tmp
+*.temp
