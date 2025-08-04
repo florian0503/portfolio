@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\ContactMessage;
+use App\Repository\ContactMessageRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,20 +18,20 @@ final class PortfolioController extends AbstractController
     {
         $projects = [
             [
-                'title' => 'E-commerce Platform',
-                'description' => 'Plateforme e-commerce moderne avec Symfony 7, React et PostgreSQL',
+                'title' => 'Golden Goat',
+                'description' => 'Site web moderne développé avec Symfony et technologies web avancées',
                 'image' => '/images/project1.jpg',
-                'technologies' => ['Symfony', 'React', 'PostgreSQL', 'Docker'],
-                'github' => 'https://github.com/votre-username/ecommerce',
-                'demo' => 'https://demo-ecommerce.com'
+                'technologies' => ['Symfony', 'PHP', 'Twig', 'Sass', 'Docker'],
+                'github' => 'https://github.com/florian0503/GoldenGoat2',
+                'demo' => 'https://goldengoat.fr'
             ],
             [
-                'title' => 'API REST Portfolio',
-                'description' => 'API REST complète avec authentification JWT et documentation Swagger',
+                'title' => 'Barbershop Lyon',
+                'description' => 'Site web professionnel pour salon de coiffure avec interface moderne',
                 'image' => '/images/project2.jpg',
-                'technologies' => ['PHP', 'API Platform', 'JWT', 'MySQL'],
-                'github' => 'https://github.com/votre-username/api-portfolio',
-                'demo' => 'https://api-portfolio.com'
+                'technologies' => ['Symfony', 'PHP', 'Twig', 'Sass'],
+                'github' => 'https://github.com/florian0503/ChrisBarberCDA',
+                'demo' => 'https://barbershoplyon.com'
             ],
             [
                 'title' => 'Dashboard Analytics',
@@ -42,24 +45,24 @@ final class PortfolioController extends AbstractController
 
         $skills = [
             ['name' => 'PHP/Symfony', 'level' => 90],
-            ['name' => 'JavaScript/TypeScript', 'level' => 85],
-            ['name' => 'React/Vue.js', 'level' => 80],
-            ['name' => 'MySQL/PostgreSQL', 'level' => 75],
-            ['name' => 'Docker/DevOps', 'level' => 70],
+            ['name' => 'JavaScript', 'level' => 85],
+            ['name' => 'Sass', 'level' => 80],
+            ['name' => 'Twig', 'level' => 85],
+            ['name' => 'Flutter/Dart', 'level' => 75],
             ['name' => 'Git/GitHub', 'level' => 85]
         ];
 
         return $this->render('portfolio/index.html.twig', [
             'projects' => $projects,
             'skills' => $skills,
-            'name' => 'Votre Nom',
+            'name' => 'Florian DIMBERT',
             'title' => 'Développeur Full Stack',
             'description' => 'Passionné par le développement web moderne, je crée des applications performantes et élégantes avec les dernières technologies.'
         ]);
     }
 
     #[Route('/contact', name: 'app_contact', methods: ['POST'])]
-    public function contact(Request $request): JsonResponse
+    public function contact(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         
@@ -72,12 +75,26 @@ final class PortfolioController extends AbstractController
             return new JsonResponse(['success' => false, 'message' => 'Email invalide.'], 400);
         }
 
-        // Here you would typically send an email or save to database
-        // For demo purposes, we'll just return success
-        
-        return new JsonResponse([
-            'success' => true, 
-            'message' => 'Merci pour votre message ! Je vous répondrai bientôt.'
-        ]);
+        // Save message to database
+        try {
+            $contactMessage = new ContactMessage();
+            $contactMessage->setName($data['name']);
+            $contactMessage->setEmail($data['email']);
+            $contactMessage->setSubject($data['subject'] ?? null);
+            $contactMessage->setMessage($data['message']);
+            
+            $entityManager->persist($contactMessage);
+            $entityManager->flush();
+            
+            return new JsonResponse([
+                'success' => true, 
+                'message' => 'Merci pour votre message ! Il a été enregistré et je vous répondrai bientôt.'
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'success' => false, 
+                'message' => 'Erreur lors de l\'enregistrement du message. Veuillez réessayer.'
+            ], 500);
+        }
     }
 }
