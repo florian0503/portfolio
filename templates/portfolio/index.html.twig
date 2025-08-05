@@ -94,7 +94,17 @@
                         </div>
                         <div class="project-content">
                             <h3>{{ project.title }}</h3>
-                            <p>{{ project.description }}</p>
+                            <div class="project-description">
+                                <p class="description-preview">{{ project.description|slice(0, 200) }}{% if project.description|length > 200 %}...{% endif %}</p>
+                                <p class="description-full" style="display: none;">{{ project.description }}</p>
+                                {% if project.description|length > 200 %}
+                                    <button class="see-more-btn" onclick="toggleDescription(this)">
+                                        <span class="see-more-text">Voir plus</span>
+                                        <span class="see-less-text" style="display: none;">Voir moins</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                {% endif %}
+                            </div>
                             <div class="project-tech">
                                 {% for tech in project.technologies %}
                                     <span>{{ tech }}</span>
@@ -104,7 +114,7 @@
                                 <a href="{{ project.github }}" target="_blank" class="github-link">
                                     <i class="fab fa-github"></i> Code
                                 </a>
-                                <a href="{{ project.demo }}" target="_blank" class="demo-link">
+                                <a href="{{ project.prod }}" target="_blank" class="demo-link">
                                     <i class="fas fa-external-link-alt"></i> Démo
                                 </a>
                             </div>
@@ -151,4 +161,22 @@
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function toggleDescription(button) {
+            const fullDescription = button.parentElement.querySelector('.description-full');
+            const previewDescription = button.parentElement.querySelector('.description-preview');
+            const isExpanded = fullDescription.style.display === 'block';
+
+            fullDescription.style.display = isExpanded ? 'none' : 'block';
+            previewDescription.style.display = isExpanded ? 'block' : 'none';
+            button.querySelector('.see-more-text').style.display = isExpanded ? 'inline' : 'none';
+            button.querySelector('.see-less-text').style.display = isExpanded ? 'none' : 'inline';
+            button.querySelector('i').classList.toggle('fa-chevron-down', isExpanded);
+            button.querySelector('i').classList.toggle('fa-chevron-up', !isExpanded);
+        }
+    </script>
 {% endblock %}
