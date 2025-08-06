@@ -253,6 +253,17 @@
                     pour discuter de vos besoins.
                 </p>
                 
+                <div class="contact-email" data-aos="fade-up" data-aos-delay="100">
+                    <div class="email-copy-container">
+                        <span class="email-text">florian.dimbert7@gmail.com</span>
+                        <button class="copy-email-btn" onclick="copyEmail()">
+                            <i class="fas fa-copy"></i>
+                            <span class="copy-text">Copier</span>
+                            <span class="copied-text" style="display: none;">Copié !</span>
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="contact-form" data-aos="fade-up" data-aos-delay="200">
                     <form>
                         <div class="form-group">
@@ -284,6 +295,23 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        function copyEmail() {
+            const email = 'florian.dimbert7@gmail.com';
+            navigator.clipboard.writeText(email).then(() => {
+                const button = document.querySelector('.copy-email-btn');
+                const copyText = button.querySelector('.copy-text');
+                const copiedText = button.querySelector('.copied-text');
+                
+                copyText.style.display = 'none';
+                copiedText.style.display = 'inline';
+                
+                setTimeout(() => {
+                    copyText.style.display = 'inline';
+                    copiedText.style.display = 'none';
+                }, 2000);
+            });
+        }
+        
         function toggleDescription(button) {
             const fullDescription = button.parentElement.querySelector('.description-full');
             const previewDescription = button.parentElement.querySelector('.description-preview');

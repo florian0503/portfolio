@@ -27,6 +27,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ajouter animation typing pour le titre
     createTypingAnimation();
     
+    // Créer la barre de progression du scroll
+    createScrollProgressBar();
+    
+    // Créer le curseur personnalisé
+    createCustomCursor();
+    
     // Ajouter bouton retour en haut
     createBackToTopButton();
     // Theme toggle functionality
@@ -685,6 +691,120 @@ function createTypingAnimation() {
     
     // Démarrer l'animation après un petit délai
     setTimeout(type, 500);
+}
+
+// Créer la barre de progression du scroll
+function createScrollProgressBar() {
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress-bar';
+    progressBar.style.position = 'fixed';
+    progressBar.style.top = '0';
+    progressBar.style.left = '0';
+    progressBar.style.width = '0%';
+    progressBar.style.height = '4px';
+    progressBar.style.background = 'linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color))';
+    progressBar.style.zIndex = '9999';
+    progressBar.style.transition = 'width 0.3s ease';
+    progressBar.style.borderRadius = '0 2px 2px 0';
+    
+    document.body.appendChild(progressBar);
+    
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset;
+        const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / documentHeight) * 100;
+        
+        progressBar.style.width = scrollPercent + '%';
+    });
+}
+
+// Créer le curseur personnalisé avec trail
+function createCustomCursor() {
+    // Créer le curseur principal
+    const cursor = document.createElement('div');
+    cursor.className = 'custom-cursor';
+    cursor.style.position = 'fixed';
+    cursor.style.width = '20px';
+    cursor.style.height = '20px';
+    cursor.style.borderRadius = '50%';
+    cursor.style.background = 'rgba(255, 255, 255, 0.9)';
+    cursor.style.pointerEvents = 'none';
+    cursor.style.zIndex = '9998';
+    cursor.style.transition = 'transform 0.1s ease';
+    cursor.style.mixBlendMode = 'difference';
+    cursor.style.opacity = '0.8';
+    
+    // Créer le trail
+    const cursorTrail = document.createElement('div');
+    cursorTrail.className = 'cursor-trail';
+    cursorTrail.style.position = 'fixed';
+    cursorTrail.style.width = '8px';
+    cursorTrail.style.height = '8px';
+    cursorTrail.style.borderRadius = '50%';
+    cursorTrail.style.background = 'rgba(255, 255, 255, 0.7)';
+    cursorTrail.style.pointerEvents = 'none';
+    cursorTrail.style.zIndex = '9997';
+    cursorTrail.style.transition = 'all 0.3s ease';
+    cursorTrail.style.opacity = '0.6';
+    
+    document.body.appendChild(cursor);
+    document.body.appendChild(cursorTrail);
+    
+    let mouseX = 0;
+    let mouseY = 0;
+    let trailX = 0;
+    let trailY = 0;
+    
+    // Cacher le curseur par défaut
+    document.body.style.cursor = 'none';
+    
+    // Suivre la souris
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        cursor.style.left = (mouseX - 10) + 'px';
+        cursor.style.top = (mouseY - 10) + 'px';
+    });
+    
+    // Animation du trail
+    function animateTrail() {
+        trailX += (mouseX - trailX) * 0.1;
+        trailY += (mouseY - trailY) * 0.1;
+        
+        cursorTrail.style.left = (trailX - 4) + 'px';
+        cursorTrail.style.top = (trailY - 4) + 'px';
+        
+        requestAnimationFrame(animateTrail);
+    }
+    animateTrail();
+    
+    // Effets hover sur les liens et boutons
+    const interactiveElements = document.querySelectorAll('a, button, .btn, input, textarea, select');
+    
+    interactiveElements.forEach(element => {
+        // Cacher le curseur par défaut sur les éléments interactifs aussi
+        element.style.cursor = 'none';
+        
+        element.addEventListener('mouseenter', () => {
+            cursor.style.transform = 'scale(1.5)';
+            cursor.style.background = 'var(--accent-color)';
+            cursorTrail.style.transform = 'scale(2)';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            cursor.style.transform = 'scale(1)';
+            cursor.style.background = 'var(--primary-color)';
+            cursorTrail.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Masquer sur mobile
+    if (window.innerWidth <= 768) {
+        cursor.style.display = 'none';
+        cursorTrail.style.display = 'none';
+        document.body.style.cursor = 'auto';
+    }
 }
 
 // Créer le bouton retour en haut
