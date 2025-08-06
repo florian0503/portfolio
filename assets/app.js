@@ -14,8 +14,15 @@ console.log('JS file loaded successfully!');
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded!');
     
-    // Créer des bulles qui suivent le scroll
-    createScrollFollowingBubbles();
+    
+    // Créer arrière-plan circuit électronique
+    createCircuitBackground();
+    
+    // Ajouter effet subtil pour l'image Florian DIMBERT
+    createProfileImageEffect();
+    
+    // Ajouter effet subtil pour la section hero
+    createHeroBackgroundEffect();
     
     // Ajouter bouton retour en haut
     createBackToTopButton();
@@ -226,155 +233,379 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Créer des bulles qui suivent le scroll et changent de couleur
-function createScrollFollowingBubbles() {
-    const body = document.body;
-    const bubbles = [];
+// Créer l'arrière-plan circuit électronique
+function createCircuitBackground() {
+    // Conteneur canvas pour les circuits
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
     
-    // Créer plusieurs bulles avec des positions fixes pour éviter superposition
-    for (let i = 0; i < 8; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'scroll-bubble';
-        bubble.style.position = 'fixed';
-        bubble.style.width = (30 + Math.random() * 40) + 'px'; // Tailles plus consistantes
-        bubble.style.height = bubble.style.width;
-        bubble.style.borderRadius = '50%';
-        bubble.style.pointerEvents = 'none';
-        bubble.style.zIndex = '999';
-        bubble.style.transition = 'background-color 0.8s ease';
-        bubble.style.opacity = '0.9';
-        bubble.style.border = '2px solid rgba(255, 255, 255, 0.3)';
-        bubble.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
-        bubble.style.backgroundColor = 'rgba(255, 0, 0, 0.8)'; // Couleur initiale ROUGE
+    // Style du canvas
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.zIndex = '-1';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.opacity = '0.6';
+    
+    // Insérer le canvas en arrière-plan
+    document.body.insertBefore(canvas, document.body.firstChild);
+    
+    // Redimensionner le canvas
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    // Configuration des circuits
+    const circuits = [];
+    const numCircuits = 12; // Nombre de lignes de circuit
+    
+    // Créer les lignes de circuit
+    for (let i = 0; i < numCircuits; i++) {
+        const circuit = {
+            startX: Math.random() * canvas.width,
+            startY: Math.random() * canvas.height,
+            endX: Math.random() * canvas.width,
+            endY: Math.random() * canvas.height,
+            progress: Math.random(),
+            speed: 0.002 + Math.random() * 0.005,
+            pulse: Math.random() * Math.PI * 2,
+            pulseSpeed: 0.02 + Math.random() * 0.03,
+            nodes: [] // Points de connexion le long de la ligne
+        };
         
-        // Positions initiales espacées pour éviter superposition
-        const gridX = (i % 4) * (window.innerWidth / 4) + Math.random() * 100;
-        const gridY = Math.floor(i / 4) * (window.innerHeight / 2) + Math.random() * 200;
-        bubble.style.left = gridX + 'px';
-        bubble.style.top = gridY + 'px';
+        // Créer des nœuds le long de la ligne
+        const numNodes = 3 + Math.floor(Math.random() * 4);
+        for (let j = 0; j < numNodes; j++) {
+            const t = j / (numNodes - 1);
+            circuit.nodes.push({
+                x: circuit.startX + (circuit.endX - circuit.startX) * t,
+                y: circuit.startY + (circuit.endY - circuit.startY) * t,
+                pulse: Math.random() * Math.PI * 2,
+                pulseSpeed: 0.03 + Math.random() * 0.02
+            });
+        }
         
-        // Données de la bulle avec positions fixes
-        bubble.baseY = gridY;
-        bubble.baseX = gridX;
-        bubble.speedMultiplier = 0.4 + Math.random() * 0.4; // Vitesses plus cohérentes
-        bubble.horizontalAmplitude = 30 + Math.random() * 20; // Amplitude d'oscillation
-        
-        body.appendChild(bubble);
-        bubbles.push(bubble);
-        
-        console.log(`Bulle ${i} créée à X:${gridX}, Y:${gridY}`);
+        circuits.push(circuit);
     }
     
-    // Définir les couleurs pour les bulles selon le thème
-    function getSectionColors() {
+    // Fonction pour obtenir la couleur selon la section actuelle
+    function getCurrentSectionColor() {
+        const scrollY = window.pageYOffset;
         const isLightTheme = document.body.classList.contains('light-theme');
         
-        if (isLightTheme) {
-            return {
-                hero: 'rgba(102, 126, 234, 0.3)',       // BLEU CLAIR
-                about: 'rgba(118, 75, 162, 0.3)',       // VIOLET CLAIR
-                skills: 'rgba(240, 147, 251, 0.3)',     // ROSE CLAIR
-                projects: 'rgba(255, 159, 67, 0.3)',    // ORANGE CLAIR
-                contact: 'rgba(54, 207, 201, 0.3)'      // CYAN CLAIR
-            };
-        } else {
-            return {
-                hero: 'rgba(102, 126, 234, 0.4)',       // BLEU SOMBRE
-                about: 'rgba(118, 75, 162, 0.4)',       // VIOLET SOMBRE
-                skills: 'rgba(240, 147, 251, 0.4)',     // ROSE SOMBRE
-                projects: 'rgba(255, 159, 67, 0.4)',    // ORANGE SOMBRE
-                contact: 'rgba(54, 207, 201, 0.4)'      // CYAN SOMBRE
-            };
-        }
-    }
-    
-    // Fonction pour obtenir la couleur selon la section actuelle (seuils ajustés)
-    function getCurrentSectionColor(scrollY) {
-        const colors = getSectionColors();
+        let baseColor;
         if (scrollY < 600) {
-            return colors.hero; // BLEU
+            baseColor = isLightTheme ? '102, 126, 234' : '102, 126, 234'; // Bleu
         } else if (scrollY < 1200) {
-            return colors.about; // VIOLET
-        } else if (scrollY < 1800) { // Seuil plus tôt pour les compétences
-            return colors.skills; // ROSE
+            baseColor = isLightTheme ? '118, 75, 162' : '118, 75, 162'; // Violet
+        } else if (scrollY < 1800) {
+            baseColor = isLightTheme ? '240, 147, 251' : '240, 147, 251'; // Rose
         } else if (scrollY < 2600) {
-            return colors.projects; // ORANGE
+            baseColor = isLightTheme ? '255, 159, 67' : '255, 159, 67'; // Orange
         } else {
-            return colors.contact; // CYAN
+            baseColor = isLightTheme ? '54, 207, 201' : '54, 207, 201'; // Cyan
         }
+        
+        return baseColor;
     }
     
-    // Les bulles commencent invisibles - apparaissent seulement au scroll
-    bubbles.forEach(bubble => {
-        bubble.style.opacity = '0';
-        bubble.style.backgroundColor = getSectionColors().hero;
-    });
+    // Animation des circuits
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const baseColor = getCurrentSectionColor();
+        
+        circuits.forEach(circuit => {
+            // Animer le progrès de la ligne
+            circuit.progress += circuit.speed;
+            if (circuit.progress > 1) {
+                circuit.progress = 0;
+                // Repositionner aléatoirement la ligne
+                circuit.startX = Math.random() * canvas.width;
+                circuit.startY = Math.random() * canvas.height;
+                circuit.endX = Math.random() * canvas.width;
+                circuit.endY = Math.random() * canvas.height;
+                
+                // Recalculer les nœuds
+                circuit.nodes.forEach((node, index) => {
+                    const t = index / (circuit.nodes.length - 1);
+                    node.x = circuit.startX + (circuit.endX - circuit.startX) * t;
+                    node.y = circuit.startY + (circuit.endY - circuit.startY) * t;
+                });
+            }
+            
+            // Dessiner la ligne de circuit
+            ctx.strokeStyle = `rgba(${baseColor}, 0.4)`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(circuit.startX, circuit.startY);
+            ctx.lineTo(circuit.endX, circuit.endY);
+            ctx.stroke();
+            
+            // Dessiner le pulse lumineux le long de la ligne
+            circuit.pulse += circuit.pulseSpeed;
+            const pulsePos = (Math.sin(circuit.pulse) + 1) / 2; // 0 à 1
+            const pulseX = circuit.startX + (circuit.endX - circuit.startX) * pulsePos;
+            const pulseY = circuit.startY + (circuit.endY - circuit.startY) * pulsePos;
+            
+            // Glow effect pour le pulse
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = `rgb(${baseColor})`;
+            ctx.fillStyle = `rgba(${baseColor}, 0.8)`;
+            ctx.beginPath();
+            ctx.arc(pulseX, pulseY, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            
+            // Dessiner les nœuds de connexion
+            circuit.nodes.forEach(node => {
+                node.pulse += node.pulseSpeed;
+                const nodeIntensity = (Math.sin(node.pulse) + 1) / 2;
+                
+                // Nœud principal
+                ctx.fillStyle = `rgba(${baseColor}, ${0.6 + nodeIntensity * 0.4})`;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Effet de glow autour du nœud
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = `rgb(${baseColor})`;
+                ctx.fillStyle = `rgba(${baseColor}, ${0.3 + nodeIntensity * 0.3})`;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+        });
+        
+        requestAnimationFrame(animate);
+    }
     
-    // Animation au scroll
-    window.addEventListener('scroll', () => {
-        const scrollY = window.pageYOffset;
-        const currentColor = getCurrentSectionColor(scrollY);
+    animate();
+}
+
+// Créer un effet subtil pour l'image de profil
+function createProfileImageEffect() {
+    const aboutImage = document.querySelector('.about-image img');
+    if (!aboutImage) return;
+    
+    // Créer un conteneur pour l'effet
+    const effectContainer = document.createElement('div');
+    effectContainer.className = 'profile-image-effect';
+    effectContainer.style.position = 'absolute';
+    effectContainer.style.top = '-10px';
+    effectContainer.style.left = '-10px';
+    effectContainer.style.right = '-10px';
+    effectContainer.style.bottom = '-10px';
+    effectContainer.style.borderRadius = '25px';
+    effectContainer.style.zIndex = '-1';
+    effectContainer.style.opacity = '0.3';
+    effectContainer.style.pointerEvents = 'none';
+    
+    // Rendre le conteneur parent relatif
+    aboutImage.parentElement.style.position = 'relative';
+    aboutImage.parentElement.insertBefore(effectContainer, aboutImage);
+    
+    // Fonction pour obtenir la couleur de la section About
+    function getAboutSectionColor() {
+        const isLightTheme = document.body.classList.contains('light-theme');
+        return isLightTheme ? '118, 75, 162' : '118, 75, 162'; // Violet
+    }
+    
+    // Animation du gradient
+    let time = 0;
+    function animateProfileGradient() {
+        time += 0.01;
+        const baseColor = getAboutSectionColor();
         
-        // Debug couleur (moins fréquent)
-        if (scrollY % 200 < 10) {
-            console.log('ScrollY:', scrollY, 'Color:', currentColor);
-        }
+        // Créer un gradient animé très subtil
+        const angle = (time * 30) % 360;
+        const gradient = `linear-gradient(${angle}deg, 
+            rgba(${baseColor}, 0.1) 0%, 
+            rgba(${baseColor}, 0.2) 30%, 
+            rgba(${baseColor}, 0.15) 60%, 
+            rgba(${baseColor}, 0.1) 100%)`;
         
-        bubbles.forEach((bubble, index) => {
-            // Position Y qui suit le scroll
-            let newY = bubble.baseY + (scrollY * bubble.speedMultiplier);
-            
-            // Gestion du cycle des bulles (repositionnement)
-            if (newY > window.innerHeight + 100) {
-                // Remettre en haut avec même X pour éviter saut visuel
-                bubble.baseY = -100;
-                newY = bubble.baseY + (scrollY * bubble.speedMultiplier);
-            }
-            
-            if (newY < -200) {
-                // Remettre en bas avec même X
-                bubble.baseY = window.innerHeight + 100;
-                newY = bubble.baseY + (scrollY * bubble.speedMultiplier);
-            }
-            
-            // Oscillation horizontale douce
-            const oscillation = Math.sin((scrollY + index * 100) * 0.003) * bubble.horizontalAmplitude;
-            const finalX = bubble.baseX + oscillation;
-            
-            // Appliquer les positions sans transform compliqué
-            bubble.style.left = finalX + 'px';
-            bubble.style.top = newY + 'px';
-            
-            // Changer la couleur selon la section actuelle
-            bubble.style.backgroundColor = currentColor;
-            
-            // Faire apparaître les bulles seulement quand on commence à descendre
-            if (scrollY > 50) {
-                bubble.style.opacity = '0.7';
+        effectContainer.style.background = gradient;
+        effectContainer.style.boxShadow = `
+            0 0 20px rgba(${baseColor}, 0.1),
+            0 0 40px rgba(${baseColor}, 0.05),
+            inset 0 0 20px rgba(${baseColor}, 0.03)
+        `;
+        
+        requestAnimationFrame(animateProfileGradient);
+    }
+    
+    // Observer pour détecter quand on est dans la section About
+    const aboutObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                effectContainer.style.opacity = '0.4';
             } else {
-                bubble.style.opacity = '0';
-            }
-            
-            bubble.style.display = 'block';
-            
-            // Debug position pour une bulle
-            if (index === 0 && scrollY % 300 < 10) {
-                console.log(`Bulle 0: X=${finalX}, Y=${newY}, opacity=${bubble.style.opacity}`);
+                effectContainer.style.opacity = '0.2';
             }
         });
+    }, { threshold: 0.3 });
+    
+    const aboutSection = document.querySelector('#about');
+    if (aboutSection) {
+        aboutObserver.observe(aboutSection);
+    }
+    
+    // Démarrer l'animation
+    animateProfileGradient();
+    
+    // Effet hover subtil
+    aboutImage.addEventListener('mouseenter', () => {
+        effectContainer.style.opacity = '0.6';
+        effectContainer.style.transition = 'opacity 0.3s ease';
     });
     
-    // Repositionner les bulles au redimensionnement avec grille
-    window.addEventListener('resize', () => {
-        bubbles.forEach((bubble, index) => {
-            const gridX = (index % 4) * (window.innerWidth / 4) + Math.random() * 100;
-            const gridY = Math.floor(index / 4) * (window.innerHeight / 2) + Math.random() * 200;
-            bubble.baseX = gridX;
-            bubble.baseY = gridY;
-            bubble.style.left = gridX + 'px';
-            bubble.style.top = gridY + 'px';
-        });
+    aboutImage.addEventListener('mouseleave', () => {
+        const aboutSection = document.querySelector('#about');
+        const rect = aboutSection.getBoundingClientRect();
+        const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+        effectContainer.style.opacity = isInView ? '0.4' : '0.2';
     });
+}
+
+// Créer un effet de fond subtil pour la section hero
+function createHeroBackgroundEffect() {
+    const heroSection = document.querySelector('#home');
+    console.log('Hero section trouvée:', heroSection);
+    
+    if (!heroSection) {
+        console.log('Aucune section #home trouvée!');
+        return;
+    }
+    
+    console.log('Création de l\'effet pour la section hero');
+    
+    // Créer le conteneur pour l'effet
+    const effectContainer = document.createElement('div');
+    effectContainer.className = 'hero-background-effect';
+    effectContainer.style.position = 'absolute';
+    effectContainer.style.top = '0';
+    effectContainer.style.left = '0';
+    effectContainer.style.width = '100%';
+    effectContainer.style.height = '100%';
+    effectContainer.style.zIndex = '1';
+    effectContainer.style.pointerEvents = 'none';
+    effectContainer.style.opacity = '0.8';
+    effectContainer.style.overflow = 'hidden';
+    
+    // Rendre la section hero relative
+    heroSection.style.position = 'relative';
+    heroSection.appendChild(effectContainer);
+    
+    // Créer plusieurs formes géométriques flottantes
+    const shapes = [];
+    const numShapes = 12;
+    
+    for (let i = 0; i < numShapes; i++) {
+        const shape = document.createElement('div');
+        shape.style.position = 'absolute';
+        shape.style.borderRadius = i % 2 === 0 ? '50%' : '20%';
+        shape.style.pointerEvents = 'none';
+        
+        // Tailles variées pour plus d'effet
+        const size = 80 + Math.random() * 120;
+        shape.style.width = size + 'px';
+        shape.style.height = size + 'px';
+        
+        // Positions couvrant mieux l'écran
+        shape.style.left = (10 + Math.random() * 80) + '%';
+        shape.style.top = (10 + Math.random() * 80) + '%';
+        
+        // Données d'animation
+        const shapeData = {
+            element: shape,
+            baseX: 10 + Math.random() * 80,
+            baseY: 10 + Math.random() * 80,
+            speedX: (Math.random() - 0.5) * 0.2,
+            speedY: (Math.random() - 0.5) * 0.2,
+            rotationSpeed: (Math.random() - 0.5) * 0.5,
+            rotation: 0,
+            scale: 0.8 + Math.random() * 0.4,
+            pulseSpeed: 0.01 + Math.random() * 0.02,
+            pulseOffset: Math.random() * Math.PI * 2
+        };
+        
+        shapes.push(shapeData);
+        effectContainer.appendChild(shape);
+        
+    }
+    
+    // Fonction pour obtenir la couleur de la section hero
+    function getHeroColor() {
+        const isLightTheme = document.body.classList.contains('light-theme');
+        return '102, 126, 234'; // Bleu pour la section hero
+    }
+    
+    // Animation des formes
+    let time = 0;
+    function animateHeroShapes() {
+        time += 0.01;
+        const baseColor = getHeroColor();
+        
+        shapes.forEach((shapeData, index) => {
+            const shape = shapeData.element;
+            
+            // Mouvement lent et fluide
+            shapeData.baseX += shapeData.speedX;
+            shapeData.baseY += shapeData.speedY;
+            
+            // Rebond sur les bords
+            if (shapeData.baseX < -10 || shapeData.baseX > 110) {
+                shapeData.speedX *= -1;
+            }
+            if (shapeData.baseY < -10 || shapeData.baseY > 110) {
+                shapeData.speedY *= -1;
+            }
+            
+            // Pulse d'opacité
+            const pulse = Math.sin(time + shapeData.pulseOffset) * 0.5 + 0.5;
+            const opacity = 0.8 + pulse * 0.2;
+            
+            // Rotation lente
+            shapeData.rotation += shapeData.rotationSpeed;
+            
+            // Appliquer les transformations
+            shape.style.left = shapeData.baseX + '%';
+            shape.style.top = shapeData.baseY + '%';
+            shape.style.transform = `
+                rotate(${shapeData.rotation}deg) 
+                scale(${shapeData.scale + pulse * 0.1})
+            `;
+            shape.style.background = `radial-gradient(circle, 
+                rgba(${baseColor}, ${opacity * 0.6}) 0%, 
+                rgba(${baseColor}, ${opacity * 0.3}) 50%, 
+                transparent 80%)`;
+            shape.style.border = 'none';
+                
+        });
+        
+        requestAnimationFrame(animateHeroShapes);
+    }
+    
+    // Démarrer l'animation
+    animateHeroShapes();
+    
+    // Effet responsive
+    function updateShapesOnResize() {
+        shapes.forEach(shapeData => {
+            shapeData.baseX = Math.random() * 100;
+            shapeData.baseY = Math.random() * 100;
+        });
+    }
+    
+    window.addEventListener('resize', updateShapesOnResize);
 }
 
 // Créer le bouton retour en haut
