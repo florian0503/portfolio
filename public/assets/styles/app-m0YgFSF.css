@@ -14,42 +14,14 @@
   --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
 }
 
-/* Style de base du body - Force le mode sombre par défaut */
-body {
-  background-color: #1a202c !important;
-  color: #f7fafc !important;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Sections principales en mode sombre */
-body .hero, body .about, body .skills, body .projects, body .contact, body .timeline {
-  background-color: #1a202c !important;
-  color: #f7fafc !important;
-}
-
-/* Light theme class - Force le mode clair */
+/* Light theme class */
 body.light-theme {
   --text-dark: #2d3748;
   --text-light: #718096;
   --bg-light: #f7fafc;
-  --bg-dark: #ffffff;
   --white: #ffffff;
   --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
-  
-  background-color: #ffffff !important;
-  color: #2d3748 !important;
-}
-
-/* Sections principales en mode clair */
-body.light-theme .hero, 
-body.light-theme .about, 
-body.light-theme .skills, 
-body.light-theme .projects, 
-body.light-theme .contact, 
-body.light-theme .timeline {
-  background-color: #ffffff !important;
-  color: #2d3748 !important;
 }
 
 body.light-theme .navbar {
@@ -1729,34 +1701,24 @@ a:focus {
   font-size: 0.8rem;
 }
 
-/* Mobile responsive - nouvelle approche avec texte court */
-@media screen and (max-width: 768px) {
-  .contact-email .email-copy-container {
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 1rem !important;
-    padding: 1rem 1.5rem !important;
-    max-width: 280px !important;
-    margin: 0 auto !important;
-    text-align: center !important;
-    justify-content: center !important;
-    align-items: center !important;
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .email-copy-container {
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem;
+    max-width: 90%;
+    margin: 0 auto;
   }
   
-  .contact-email .desktop-email {
-    display: none !important;
+  .email-text {
+    font-size: 0.9rem;
+    word-break: break-all;
   }
   
-  .contact-email .mobile-email {
-    display: block !important;
-    font-size: 1rem !important;
-    text-align: center !important;
-  }
-  
-  .contact-email .copy-email-btn {
-    padding: 0.5rem 1rem !important;
-    font-size: 0.85rem !important;
-    min-width: auto !important;
-    flex-shrink: 0 !important;
+  .copy-email-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    min-width: 70px;
   }
 }

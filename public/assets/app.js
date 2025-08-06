@@ -10,6 +10,23 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         const skillBars = document.querySelectorAll('.skill-progress');
         
+        // Debug visuel pour mobile
+        const debugDiv = document.createElement('div');
+        debugDiv.style.cssText = `
+            position: fixed; 
+            top: 10px; 
+            right: 10px; 
+            background: red; 
+            color: white; 
+            padding: 10px; 
+            z-index: 9999; 
+            font-size: 12px;
+        `;
+        debugDiv.textContent = `Barres trouvées: ${skillBars.length}`;
+        document.body.appendChild(debugDiv);
+        
+        // Supprimer le debug après 5 secondes
+        setTimeout(() => debugDiv.remove(), 5000);
         
         if (skillBars.length > 0) {
             skillBars.forEach(bar => {
@@ -22,15 +39,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 bar.style.width = percentage;
                 bar.style.transition = 'width 1.5s ease';
                 
-                // Fix spécifique Safari - force avec !important
+                // Fix spécifique Safari
                 if (/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) {
-                    bar.style.cssText = `
-                        width: ${percentage} !important;
-                        transition: width 2s ease !important;
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-                        height: 100% !important;
-                        border-radius: 4px !important;
-                    `;
+                    bar.style.transform = `scaleX(${parseInt(percentage)/100})`;
+                    bar.style.transformOrigin = 'left';
                 }
             });
         }
@@ -49,17 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     createBackToTopButton();
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
-    const themeIcon = themeToggle ? themeToggle.querySelector('i') : null;
-    
-    // Debug: forcer le mode sombre au démarrage
-    body.classList.remove('light-theme');
-    body.style.backgroundColor = '#1a202c';
-    body.style.color = '#f7fafc';
-    
-    if (!themeToggle) {
-        console.error('Theme toggle not found');
-        return;
-    }
+    const themeIcon = themeToggle.querySelector('i');
     
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
