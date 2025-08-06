@@ -137,6 +137,20 @@ document.addEventListener('DOMContentLoaded', function() {
         animateOnScroll.observe(el);
     });
 
+    // Timeline animation
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, { threshold: 0.2 });
+
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    timelineItems.forEach(item => {
+        timelineObserver.observe(item);
+    });
+
     // Contact form handling
     const contactForm = document.querySelector('.contact-form form');
     if (contactForm) {
