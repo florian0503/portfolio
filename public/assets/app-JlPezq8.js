@@ -24,9 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ajouter effet subtil pour la section hero
     createHeroBackgroundEffect();
     
-    // Ajouter animation typing pour le titre
-    createTypingAnimation();
-    
     // Ajouter bouton retour en haut
     createBackToTopButton();
     // Theme toggle functionality
@@ -623,68 +620,6 @@ function createHeroBackgroundEffect() {
     }
     
     window.addEventListener('resize', updateShapesOnResize);
-}
-
-// Créer l'animation typing pour le titre principal
-function createTypingAnimation() {
-    const titleElement = document.getElementById('typing-title');
-    if (!titleElement) return;
-    
-    const texts = [
-        'Florian DIMBERT',
-        'Développeur Full Stack',
-        'Passionné de Code',
-        'Florian DIMBERT'
-    ];
-    
-    let currentTextIndex = 0;
-    let currentCharIndex = 0;
-    let isDeleting = false;
-    let isDone = false;
-    
-    function type() {
-        if (isDone) return;
-        
-        const currentText = texts[currentTextIndex];
-        
-        if (!isDeleting) {
-            // Écriture
-            titleElement.textContent = currentText.slice(0, currentCharIndex + 1);
-            currentCharIndex++;
-            
-            if (currentCharIndex === currentText.length) {
-                // Texte complet, pause puis effacer (sauf pour le dernier)
-                if (currentTextIndex === texts.length - 1) {
-                    isDone = true;
-                    titleElement.classList.add('typing-done');
-                    return;
-                }
-                
-                setTimeout(() => {
-                    isDeleting = true;
-                }, 1500); // Pause de 1.5s
-            }
-        } else {
-            // Effacement
-            titleElement.textContent = currentText.slice(0, currentCharIndex - 1);
-            currentCharIndex--;
-            
-            if (currentCharIndex === 0) {
-                isDeleting = false;
-                currentTextIndex++;
-                if (currentTextIndex >= texts.length) {
-                    currentTextIndex = 0;
-                }
-            }
-        }
-        
-        // Vitesses différentes pour écriture/effacement
-        const typeSpeed = isDeleting ? 50 : 100;
-        setTimeout(type, typeSpeed);
-    }
-    
-    // Démarrer l'animation après un petit délai
-    setTimeout(type, 500);
 }
 
 // Créer le bouton retour en haut

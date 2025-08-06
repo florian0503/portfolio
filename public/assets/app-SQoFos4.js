@@ -24,9 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ajouter effet subtil pour la section hero
     createHeroBackgroundEffect();
     
-    // Ajouter animation typing pour le titre
-    createTypingAnimation();
-    
     // Ajouter bouton retour en haut
     createBackToTopButton();
     // Theme toggle functionality
@@ -138,20 +135,6 @@ document.addEventListener('DOMContentLoaded', function() {
         el.style.transform = 'translateY(30px)';
         el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         animateOnScroll.observe(el);
-    });
-
-    // Timeline animation
-    const timelineObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate');
-            }
-        });
-    }, { threshold: 0.2 });
-
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    timelineItems.forEach(item => {
-        timelineObserver.observe(item);
     });
 
     // Contact form handling
@@ -512,9 +495,9 @@ function createHeroBackgroundEffect() {
     effectContainer.style.left = '0';
     effectContainer.style.width = '100%';
     effectContainer.style.height = '100%';
-    effectContainer.style.zIndex = '1';
+    effectContainer.style.zIndex = '-1';
     effectContainer.style.pointerEvents = 'none';
-    effectContainer.style.opacity = '0.8';
+    effectContainer.style.opacity = '1';
     effectContainer.style.overflow = 'hidden';
     
     // Rendre la section hero relative
@@ -523,7 +506,7 @@ function createHeroBackgroundEffect() {
     
     // Créer plusieurs formes géométriques flottantes
     const shapes = [];
-    const numShapes = 12;
+    const numShapes = 6;
     
     for (let i = 0; i < numShapes; i++) {
         const shape = document.createElement('div');
@@ -531,20 +514,20 @@ function createHeroBackgroundEffect() {
         shape.style.borderRadius = i % 2 === 0 ? '50%' : '20%';
         shape.style.pointerEvents = 'none';
         
-        // Tailles variées pour plus d'effet
-        const size = 80 + Math.random() * 120;
+        // Tailles plus grandes et visibles
+        const size = 150 + Math.random() * 200;
         shape.style.width = size + 'px';
         shape.style.height = size + 'px';
         
-        // Positions couvrant mieux l'écran
-        shape.style.left = (10 + Math.random() * 80) + '%';
-        shape.style.top = (10 + Math.random() * 80) + '%';
+        // Positions initiales aléatoires
+        shape.style.left = Math.random() * 100 + '%';
+        shape.style.top = Math.random() * 100 + '%';
         
         // Données d'animation
         const shapeData = {
             element: shape,
-            baseX: 10 + Math.random() * 80,
-            baseY: 10 + Math.random() * 80,
+            baseX: Math.random() * 100,
+            baseY: Math.random() * 100,
             speedX: (Math.random() - 0.5) * 0.2,
             speedY: (Math.random() - 0.5) * 0.2,
             rotationSpeed: (Math.random() - 0.5) * 0.5,
@@ -557,6 +540,7 @@ function createHeroBackgroundEffect() {
         shapes.push(shapeData);
         effectContainer.appendChild(shape);
         
+        console.log(`Forme ${i} créée:`, shape);
     }
     
     // Fonction pour obtenir la couleur de la section hero
@@ -588,7 +572,7 @@ function createHeroBackgroundEffect() {
             
             // Pulse d'opacité
             const pulse = Math.sin(time + shapeData.pulseOffset) * 0.5 + 0.5;
-            const opacity = 0.8 + pulse * 0.2;
+            const opacity = 0.6 + pulse * 0.4;
             
             // Rotation lente
             shapeData.rotation += shapeData.rotationSpeed;
@@ -601,11 +585,14 @@ function createHeroBackgroundEffect() {
                 scale(${shapeData.scale + pulse * 0.1})
             `;
             shape.style.background = `radial-gradient(circle, 
-                rgba(${baseColor}, ${opacity * 0.6}) 0%, 
-                rgba(${baseColor}, ${opacity * 0.3}) 50%, 
-                transparent 80%)`;
-            shape.style.border = 'none';
+                rgba(${baseColor}, ${opacity}) 0%, 
+                rgba(${baseColor}, ${opacity * 0.5}) 50%, 
+                transparent 70%)`;
                 
+            // Debug pour la première forme
+            if (index === 0) {
+                console.log(`Forme 0 - Position: ${shapeData.baseX}%, ${shapeData.baseY}% - Opacity: ${opacity} - Color: ${baseColor}`);
+            }
         });
         
         requestAnimationFrame(animateHeroShapes);
@@ -623,68 +610,6 @@ function createHeroBackgroundEffect() {
     }
     
     window.addEventListener('resize', updateShapesOnResize);
-}
-
-// Créer l'animation typing pour le titre principal
-function createTypingAnimation() {
-    const titleElement = document.getElementById('typing-title');
-    if (!titleElement) return;
-    
-    const texts = [
-        'Florian DIMBERT',
-        'Développeur Full Stack',
-        'Passionné de Code',
-        'Florian DIMBERT'
-    ];
-    
-    let currentTextIndex = 0;
-    let currentCharIndex = 0;
-    let isDeleting = false;
-    let isDone = false;
-    
-    function type() {
-        if (isDone) return;
-        
-        const currentText = texts[currentTextIndex];
-        
-        if (!isDeleting) {
-            // Écriture
-            titleElement.textContent = currentText.slice(0, currentCharIndex + 1);
-            currentCharIndex++;
-            
-            if (currentCharIndex === currentText.length) {
-                // Texte complet, pause puis effacer (sauf pour le dernier)
-                if (currentTextIndex === texts.length - 1) {
-                    isDone = true;
-                    titleElement.classList.add('typing-done');
-                    return;
-                }
-                
-                setTimeout(() => {
-                    isDeleting = true;
-                }, 1500); // Pause de 1.5s
-            }
-        } else {
-            // Effacement
-            titleElement.textContent = currentText.slice(0, currentCharIndex - 1);
-            currentCharIndex--;
-            
-            if (currentCharIndex === 0) {
-                isDeleting = false;
-                currentTextIndex++;
-                if (currentTextIndex >= texts.length) {
-                    currentTextIndex = 0;
-                }
-            }
-        }
-        
-        // Vitesses différentes pour écriture/effacement
-        const typeSpeed = isDeleting ? 50 : 100;
-        setTimeout(type, typeSpeed);
-    }
-    
-    // Démarrer l'animation après un petit délai
-    setTimeout(type, 500);
 }
 
 // Créer le bouton retour en haut

@@ -9,12 +9,22 @@
     <section id="home" class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>{{ name }}</h1>
+                <h1 id="typing-title"></h1>
                 <p class="subtitle">{{ title }}</p>
                 <p class="description">{{ description }}</p>
                 <div class="cta-buttons">
-                    <a href="#projects" class="btn btn-primary">Voir mes projets</a>
-                    <a href="#contact" class="btn btn-outline">Me contacter</a>
+                    <a href="#projects" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        <span>Voir mes projets</span>
+                    </a>
+                    <a href="{{ asset('cv/cv-florian-dimbert.pdf') }}" class="btn btn-gradient" download="CV-Florian-Dimbert.pdf">
+                        <i class="fas fa-download"></i>
+                        <span>Télécharger mon CV</span>
+                    </a>
+                    <a href="#contact" class="btn btn-outline">
+                        <i class="fas fa-envelope"></i>
+                        <span>Me contacter</span>
+                    </a>
                 </div>
             </div>
             <div class="scroll-indicator"></div>

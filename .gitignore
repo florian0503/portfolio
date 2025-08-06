@@ -4,7 +4,8 @@
 !var/cache/.gitkeep
 !var/log/.gitkeep
 
-# Env files (except .env which is versioned)
+# Environment files
+/.env
 /.env.local
 /.env.local.php
 /.env.*.local
