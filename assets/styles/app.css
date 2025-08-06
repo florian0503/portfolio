@@ -825,12 +825,23 @@ body {
   height: 200px;
   background: var(--gradient);
   display: flex;
-  align-items: center;
   justify-content: center;
   color: var(--white);
   font-size: 3rem;
   position: relative;
   overflow: hidden;
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.3s ease;
+}
+
+.project-image:hover img {
+  transform: scale(1.05);
 }
 
 .project-image::before {
@@ -1690,15 +1701,34 @@ a:focus {
   font-size: 0.8rem;
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .email-copy-container {
-    flex-direction: column;
-    gap: 0.8rem;
-    padding: 1.2rem;
+/* Mobile responsive - nouvelle approche avec texte court */
+@media screen and (max-width: 768px) {
+  .contact-email .email-copy-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 1rem !important;
+    padding: 1rem 1.5rem !important;
+    max-width: 280px !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
   }
   
-  .email-text {
-    font-size: 1rem;
+  .contact-email .desktop-email {
+    display: none !important;
+  }
+  
+  .contact-email .mobile-email {
+    display: block !important;
+    font-size: 1rem !important;
+    text-align: center !important;
+  }
+  
+  .contact-email .copy-email-btn {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.85rem !important;
+    min-width: auto !important;
+    flex-shrink: 0 !important;
   }
 }

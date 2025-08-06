@@ -208,7 +208,11 @@
                 {% for project in projects %}
                     <div class="project-card" data-aos="flip-left" data-aos-delay="{{ loop.index * 150 }}">
                         <div class="project-image">
-                            <i class="fas fa-code"></i>
+                            {% if project.image %}
+                                <img src="{{ asset(project.image) }}" alt="{{ project.title }}" />
+                            {% else %}
+                                <i class="fas fa-code"></i>
+                            {% endif %}
                         </div>
                         <div class="project-content">
                             <h3>{{ project.title }}</h3>
@@ -255,7 +259,8 @@
                 
                 <div class="contact-email" data-aos="fade-up" data-aos-delay="100">
                     <div class="email-copy-container">
-                        <span class="email-text">florian.dimbert7@gmail.com</span>
+                        <span class="email-text desktop-email">florian.dimbert7@gmail.com</span>
+                        <span class="email-text mobile-email" style="display: none;">Mon email</span>
                         <button class="copy-email-btn" onclick="copyEmail()">
                             <i class="fas fa-copy"></i>
                             <span class="copy-text">Copier</span>

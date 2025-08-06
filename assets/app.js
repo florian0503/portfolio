@@ -1,46 +1,26 @@
 import './bootstrap.js';
-/*
- * Welcome to your app's main JavaScript file!
- *
- * This file will be included onto the page via the importmap() Twig function,
- * which should already be in your base.html.twig.
- */
 import './styles/app.css';
 
-// Test simple d'abord
-console.log('JS file loaded successfully!');
 
-// Portfolio interactivity
+createLoadingScreen();
+
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded!');
     
+    setTimeout(() => {
+        hideLoadingScreen();
+    }, 2000);
     
-    // Créer arrière-plan circuit électronique
     createCircuitBackground();
-    
-    // Ajouter effet subtil pour l'image Florian DIMBERT
     createProfileImageEffect();
-    
-    // Ajouter effet subtil pour la section hero
     createHeroBackgroundEffect();
-    
-    // Ajouter animation typing pour le titre
     createTypingAnimation();
-    
-    // Créer la barre de progression du scroll
     createScrollProgressBar();
-    
-    // Créer le curseur personnalisé
     createCustomCursor();
-    
-    // Ajouter bouton retour en haut
     createBackToTopButton();
-    // Theme toggle functionality
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
     const themeIcon = themeToggle.querySelector('i');
     
-    // Check for saved theme preference or default to dark
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
         body.classList.add('light-theme');
@@ -59,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Navbar scroll effect
     const navbar = document.querySelector('.navbar');
     const hamburger = document.querySelector('.hamburger');
     const mobileMenu = document.querySelector('.mobile-menu');
@@ -67,21 +46,17 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
-            console.log('Added scrolled class');
         } else {
             navbar.classList.remove('scrolled');
-            console.log('Removed scrolled class');
         }
     });
 
-    // Mobile menu toggle
     if (hamburger && mobileMenu) {
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             mobileMenu.classList.toggle('active');
         });
 
-        // Close mobile menu when clicking on links
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -91,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Smooth scrolling for navigation links
     const navLinks = document.querySelectorAll('a[href^="#"]');
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -104,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Animate skill bars on scroll
     const observerOptions = {
         threshold: 0.7,
         rootMargin: '0px 0px -100px 0px'
@@ -128,7 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(skillsSection);
     }
 
-    // Animate elements on scroll
     const animateOnScroll = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -146,7 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
         animateOnScroll.observe(el);
     });
 
-    // Timeline animation
     const timelineObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -160,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function() {
         timelineObserver.observe(item);
     });
 
-    // Contact form handling
     const contactForm = document.querySelector('.contact-form form');
     if (contactForm) {
         contactForm.addEventListener('submit', async (e) => {
@@ -201,7 +171,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Notification system
     function showNotification(message, type) {
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
@@ -210,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
             ${message}
         `;
         
-        // Add notification styles if not already present
         if (!document.querySelector('#notification-styles')) {
             const styles = document.createElement('style');
             styles.id = 'notification-styles';
@@ -245,10 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         document.body.appendChild(notification);
         
-        // Show notification
         setTimeout(() => notification.classList.add('show'), 100);
         
-        // Hide and remove notification
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => notification.remove(), 300);
@@ -256,13 +222,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Créer l'arrière-plan circuit électronique
 function createCircuitBackground() {
-    // Conteneur canvas pour les circuits
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     
-    // Style du canvas
     canvas.style.position = 'fixed';
     canvas.style.top = '0';
     canvas.style.left = '0';
@@ -272,10 +235,8 @@ function createCircuitBackground() {
     canvas.style.pointerEvents = 'none';
     canvas.style.opacity = '0.6';
     
-    // Insérer le canvas en arrière-plan
     document.body.insertBefore(canvas, document.body.firstChild);
     
-    // Redimensionner le canvas
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -283,11 +244,9 @@ function createCircuitBackground() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     
-    // Configuration des circuits
     const circuits = [];
-    const numCircuits = 12; // Nombre de lignes de circuit
+    const numCircuits = 12;
     
-    // Créer les lignes de circuit
     for (let i = 0; i < numCircuits; i++) {
         const circuit = {
             startX: Math.random() * canvas.width,
@@ -298,10 +257,9 @@ function createCircuitBackground() {
             speed: 0.002 + Math.random() * 0.005,
             pulse: Math.random() * Math.PI * 2,
             pulseSpeed: 0.02 + Math.random() * 0.03,
-            nodes: [] // Points de connexion le long de la ligne
+            nodes: []
         };
         
-        // Créer des nœuds le long de la ligne
         const numNodes = 3 + Math.floor(Math.random() * 4);
         for (let j = 0; j < numNodes; j++) {
             const t = j / (numNodes - 1);
@@ -316,45 +274,40 @@ function createCircuitBackground() {
         circuits.push(circuit);
     }
     
-    // Fonction pour obtenir la couleur selon la section actuelle
     function getCurrentSectionColor() {
         const scrollY = window.pageYOffset;
         const isLightTheme = document.body.classList.contains('light-theme');
         
         let baseColor;
         if (scrollY < 600) {
-            baseColor = isLightTheme ? '102, 126, 234' : '102, 126, 234'; // Bleu
+            baseColor = '102, 126, 234';
         } else if (scrollY < 1200) {
-            baseColor = isLightTheme ? '118, 75, 162' : '118, 75, 162'; // Violet
+            baseColor = '118, 75, 162';
         } else if (scrollY < 1800) {
-            baseColor = isLightTheme ? '240, 147, 251' : '240, 147, 251'; // Rose
+            baseColor = '240, 147, 251';
         } else if (scrollY < 2600) {
-            baseColor = isLightTheme ? '255, 159, 67' : '255, 159, 67'; // Orange
+            baseColor = '255, 159, 67';
         } else {
-            baseColor = isLightTheme ? '54, 207, 201' : '54, 207, 201'; // Cyan
+            baseColor = '54, 207, 201';
         }
         
         return baseColor;
     }
     
-    // Animation des circuits
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         const baseColor = getCurrentSectionColor();
         
         circuits.forEach(circuit => {
-            // Animer le progrès de la ligne
             circuit.progress += circuit.speed;
             if (circuit.progress > 1) {
                 circuit.progress = 0;
-                // Repositionner aléatoirement la ligne
                 circuit.startX = Math.random() * canvas.width;
                 circuit.startY = Math.random() * canvas.height;
                 circuit.endX = Math.random() * canvas.width;
                 circuit.endY = Math.random() * canvas.height;
                 
-                // Recalculer les nœuds
                 circuit.nodes.forEach((node, index) => {
                     const t = index / (circuit.nodes.length - 1);
                     node.x = circuit.startX + (circuit.endX - circuit.startX) * t;
@@ -362,7 +315,6 @@ function createCircuitBackground() {
                 });
             }
             
-            // Dessiner la ligne de circuit
             ctx.strokeStyle = `rgba(${baseColor}, 0.4)`;
             ctx.lineWidth = 1;
             ctx.beginPath();
@@ -370,13 +322,11 @@ function createCircuitBackground() {
             ctx.lineTo(circuit.endX, circuit.endY);
             ctx.stroke();
             
-            // Dessiner le pulse lumineux le long de la ligne
             circuit.pulse += circuit.pulseSpeed;
-            const pulsePos = (Math.sin(circuit.pulse) + 1) / 2; // 0 à 1
+            const pulsePos = (Math.sin(circuit.pulse) + 1) / 2;
             const pulseX = circuit.startX + (circuit.endX - circuit.startX) * pulsePos;
             const pulseY = circuit.startY + (circuit.endY - circuit.startY) * pulsePos;
             
-            // Glow effect pour le pulse
             ctx.shadowBlur = 15;
             ctx.shadowColor = `rgb(${baseColor})`;
             ctx.fillStyle = `rgba(${baseColor}, 0.8)`;
@@ -385,18 +335,15 @@ function createCircuitBackground() {
             ctx.fill();
             ctx.shadowBlur = 0;
             
-            // Dessiner les nœuds de connexion
             circuit.nodes.forEach(node => {
                 node.pulse += node.pulseSpeed;
                 const nodeIntensity = (Math.sin(node.pulse) + 1) / 2;
                 
-                // Nœud principal
                 ctx.fillStyle = `rgba(${baseColor}, ${0.6 + nodeIntensity * 0.4})`;
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Effet de glow autour du nœud
                 ctx.shadowBlur = 8;
                 ctx.shadowColor = `rgb(${baseColor})`;
                 ctx.fillStyle = `rgba(${baseColor}, ${0.3 + nodeIntensity * 0.3})`;
@@ -413,12 +360,10 @@ function createCircuitBackground() {
     animate();
 }
 
-// Créer un effet subtil pour l'image de profil
 function createProfileImageEffect() {
     const aboutImage = document.querySelector('.about-image img');
     if (!aboutImage) return;
     
-    // Créer un conteneur pour l'effet
     const effectContainer = document.createElement('div');
     effectContainer.className = 'profile-image-effect';
     effectContainer.style.position = 'absolute';
@@ -431,23 +376,19 @@ function createProfileImageEffect() {
     effectContainer.style.opacity = '0.3';
     effectContainer.style.pointerEvents = 'none';
     
-    // Rendre le conteneur parent relatif
     aboutImage.parentElement.style.position = 'relative';
     aboutImage.parentElement.insertBefore(effectContainer, aboutImage);
     
-    // Fonction pour obtenir la couleur de la section About
     function getAboutSectionColor() {
         const isLightTheme = document.body.classList.contains('light-theme');
-        return isLightTheme ? '118, 75, 162' : '118, 75, 162'; // Violet
+        return '118, 75, 162';
     }
     
-    // Animation du gradient
     let time = 0;
     function animateProfileGradient() {
         time += 0.01;
         const baseColor = getAboutSectionColor();
         
-        // Créer un gradient animé très subtil
         const angle = (time * 30) % 360;
         const gradient = `linear-gradient(${angle}deg, 
             rgba(${baseColor}, 0.1) 0%, 
@@ -465,7 +406,6 @@ function createProfileImageEffect() {
         requestAnimationFrame(animateProfileGradient);
     }
     
-    // Observer pour détecter quand on est dans la section About
     const aboutObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -481,10 +421,8 @@ function createProfileImageEffect() {
         aboutObserver.observe(aboutSection);
     }
     
-    // Démarrer l'animation
     animateProfileGradient();
     
-    // Effet hover subtil
     aboutImage.addEventListener('mouseenter', () => {
         effectContainer.style.opacity = '0.6';
         effectContainer.style.transition = 'opacity 0.3s ease';
@@ -498,19 +436,13 @@ function createProfileImageEffect() {
     });
 }
 
-// Créer un effet de fond subtil pour la section hero
 function createHeroBackgroundEffect() {
     const heroSection = document.querySelector('#home');
-    console.log('Hero section trouvée:', heroSection);
     
     if (!heroSection) {
-        console.log('Aucune section #home trouvée!');
         return;
     }
     
-    console.log('Création de l\'effet pour la section hero');
-    
-    // Créer le conteneur pour l'effet
     const effectContainer = document.createElement('div');
     effectContainer.className = 'hero-background-effect';
     effectContainer.style.position = 'absolute';
@@ -523,11 +455,9 @@ function createHeroBackgroundEffect() {
     effectContainer.style.opacity = '0.8';
     effectContainer.style.overflow = 'hidden';
     
-    // Rendre la section hero relative
     heroSection.style.position = 'relative';
     heroSection.appendChild(effectContainer);
     
-    // Créer plusieurs formes géométriques flottantes
     const shapes = [];
     const numShapes = 12;
     
@@ -537,16 +467,13 @@ function createHeroBackgroundEffect() {
         shape.style.borderRadius = i % 2 === 0 ? '50%' : '20%';
         shape.style.pointerEvents = 'none';
         
-        // Tailles variées pour plus d'effet
         const size = 80 + Math.random() * 120;
         shape.style.width = size + 'px';
         shape.style.height = size + 'px';
         
-        // Positions couvrant mieux l'écran
         shape.style.left = (10 + Math.random() * 80) + '%';
         shape.style.top = (10 + Math.random() * 80) + '%';
         
-        // Données d'animation
         const shapeData = {
             element: shape,
             baseX: 10 + Math.random() * 80,
@@ -565,13 +492,11 @@ function createHeroBackgroundEffect() {
         
     }
     
-    // Fonction pour obtenir la couleur de la section hero
     function getHeroColor() {
         const isLightTheme = document.body.classList.contains('light-theme');
-        return '102, 126, 234'; // Bleu pour la section hero
+        return '102, 126, 234';
     }
     
-    // Animation des formes
     let time = 0;
     function animateHeroShapes() {
         time += 0.01;
@@ -580,11 +505,9 @@ function createHeroBackgroundEffect() {
         shapes.forEach((shapeData, index) => {
             const shape = shapeData.element;
             
-            // Mouvement lent et fluide
             shapeData.baseX += shapeData.speedX;
             shapeData.baseY += shapeData.speedY;
             
-            // Rebond sur les bords
             if (shapeData.baseX < -10 || shapeData.baseX > 110) {
                 shapeData.speedX *= -1;
             }
@@ -592,14 +515,11 @@ function createHeroBackgroundEffect() {
                 shapeData.speedY *= -1;
             }
             
-            // Pulse d'opacité
             const pulse = Math.sin(time + shapeData.pulseOffset) * 0.5 + 0.5;
             const opacity = 0.8 + pulse * 0.2;
             
-            // Rotation lente
             shapeData.rotation += shapeData.rotationSpeed;
             
-            // Appliquer les transformations
             shape.style.left = shapeData.baseX + '%';
             shape.style.top = shapeData.baseY + '%';
             shape.style.transform = `
@@ -617,10 +537,8 @@ function createHeroBackgroundEffect() {
         requestAnimationFrame(animateHeroShapes);
     }
     
-    // Démarrer l'animation
     animateHeroShapes();
     
-    // Effet responsive
     function updateShapesOnResize() {
         shapes.forEach(shapeData => {
             shapeData.baseX = Math.random() * 100;
@@ -631,7 +549,6 @@ function createHeroBackgroundEffect() {
     window.addEventListener('resize', updateShapesOnResize);
 }
 
-// Créer l'animation typing pour le titre principal
 function createTypingAnimation() {
     const titleElement = document.getElementById('typing-title');
     if (!titleElement) return;
@@ -654,12 +571,10 @@ function createTypingAnimation() {
         const currentText = texts[currentTextIndex];
         
         if (!isDeleting) {
-            // Écriture
             titleElement.textContent = currentText.slice(0, currentCharIndex + 1);
             currentCharIndex++;
             
             if (currentCharIndex === currentText.length) {
-                // Texte complet, pause puis effacer (sauf pour le dernier)
                 if (currentTextIndex === texts.length - 1) {
                     isDone = true;
                     titleElement.classList.add('typing-done');
@@ -668,10 +583,9 @@ function createTypingAnimation() {
                 
                 setTimeout(() => {
                     isDeleting = true;
-                }, 1500); // Pause de 1.5s
+                }, 1500);
             }
         } else {
-            // Effacement
             titleElement.textContent = currentText.slice(0, currentCharIndex - 1);
             currentCharIndex--;
             
@@ -684,16 +598,13 @@ function createTypingAnimation() {
             }
         }
         
-        // Vitesses différentes pour écriture/effacement
         const typeSpeed = isDeleting ? 50 : 100;
         setTimeout(type, typeSpeed);
     }
     
-    // Démarrer l'animation après un petit délai
     setTimeout(type, 500);
 }
 
-// Créer la barre de progression du scroll
 function createScrollProgressBar() {
     const progressBar = document.createElement('div');
     progressBar.className = 'scroll-progress-bar';
@@ -718,9 +629,7 @@ function createScrollProgressBar() {
     });
 }
 
-// Créer le curseur personnalisé avec trail
 function createCustomCursor() {
-    // Créer le curseur principal
     const cursor = document.createElement('div');
     cursor.className = 'custom-cursor';
     cursor.style.position = 'fixed';
@@ -734,7 +643,6 @@ function createCustomCursor() {
     cursor.style.mixBlendMode = 'difference';
     cursor.style.opacity = '0.8';
     
-    // Créer le trail
     const cursorTrail = document.createElement('div');
     cursorTrail.className = 'cursor-trail';
     cursorTrail.style.position = 'fixed';
@@ -755,10 +663,8 @@ function createCustomCursor() {
     let trailX = 0;
     let trailY = 0;
     
-    // Cacher le curseur par défaut
     document.body.style.cursor = 'none';
     
-    // Suivre la souris
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
@@ -767,7 +673,6 @@ function createCustomCursor() {
         cursor.style.top = (mouseY - 10) + 'px';
     });
     
-    // Animation du trail
     function animateTrail() {
         trailX += (mouseX - trailX) * 0.1;
         trailY += (mouseY - trailY) * 0.1;
@@ -779,11 +684,9 @@ function createCustomCursor() {
     }
     animateTrail();
     
-    // Effets hover sur les liens et boutons
     const interactiveElements = document.querySelectorAll('a, button, .btn, input, textarea, select');
     
     interactiveElements.forEach(element => {
-        // Cacher le curseur par défaut sur les éléments interactifs aussi
         element.style.cursor = 'none';
         
         element.addEventListener('mouseenter', () => {
@@ -799,7 +702,6 @@ function createCustomCursor() {
         });
     });
     
-    // Masquer sur mobile
     if (window.innerWidth <= 768) {
         cursor.style.display = 'none';
         cursorTrail.style.display = 'none';
@@ -807,7 +709,6 @@ function createCustomCursor() {
     }
 }
 
-// Créer le bouton retour en haut
 function createBackToTopButton() {
     const backToTop = document.createElement('button');
     backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
@@ -829,7 +730,6 @@ function createBackToTopButton() {
     backToTop.style.transform = 'scale(0)';
     backToTop.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
     
-    // Effet hover
     backToTop.addEventListener('mouseenter', () => {
         backToTop.style.transform = 'scale(1.1)';
         backToTop.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
@@ -840,7 +740,6 @@ function createBackToTopButton() {
         backToTop.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
     });
     
-    // Clic pour remonter
     backToTop.addEventListener('click', () => {
         window.scrollTo({
             top: 0,
@@ -850,7 +749,6 @@ function createBackToTopButton() {
     
     document.body.appendChild(backToTop);
     
-    // Afficher/masquer selon le scroll
     window.addEventListener('scroll', () => {
         if (window.pageYOffset > 300) {
             backToTop.style.opacity = '1';
@@ -862,4 +760,276 @@ function createBackToTopButton() {
     });
 }
 
-console.log('Portfolio loaded successfully! 🚀');
+
+
+function createLoadingScreen() {
+    const loadingScreen = document.createElement('div');
+    loadingScreen.id = 'loading-screen';
+    loadingScreen.innerHTML = `
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="loading-text">FD</div>
+                <div class="loading-circle"></div>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar"></div>
+            </div>
+            <div class="loading-status">Chargement en cours...</div>
+            <div class="loading-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+        </div>
+    `;
+    
+    const loadingStyles = document.createElement('style');
+    loadingStyles.textContent = `
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(20, 30, 48, 0.95) 0%, 
+                rgba(36, 59, 85, 0.95) 50%, 
+                rgba(20, 30, 48, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        .loading-content {
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .loading-logo {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+        
+        .loading-text {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .loading-circle {
+            width: 80px;
+            height: 80px;
+            border: 3px solid transparent;
+            border-top: 3px solid #667eea;
+            border-right: 3px solid #764ba2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .loading-circle::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 3px solid transparent;
+            border-bottom: 3px solid #f093fb;
+            border-left: 3px solid #f5576c;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite reverse;
+        }
+        
+        .loading-bar-container {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin: 2rem auto;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .loading-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 2px;
+            animation: loadProgress 2s ease-in-out forwards;
+            position: relative;
+        }
+        
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255,255,255,0.4) 50%, 
+                transparent 100%);
+            animation: shimmer 1.5s ease-in-out infinite;
+        }
+        
+        .loading-status {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 1rem;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+        
+        .loading-particles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #667eea;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+        
+        .particle:nth-child(1) {
+            top: 20%;
+            left: 20%;
+            animation: float1 3s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(2) {
+            top: 30%;
+            right: 15%;
+            animation: float2 3.5s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(3) {
+            bottom: 25%;
+            left: 30%;
+            animation: float3 4s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(4) {
+            bottom: 20%;
+            right: 25%;
+            animation: float4 3.2s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(5) {
+            top: 50%;
+            left: 10%;
+            animation: float5 3.8s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(300px); }
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -15px) scale(1.2); }
+        }
+        
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-15px, 20px) scale(0.8); }
+        }
+        
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(25px, 10px) scale(1.1); }
+        }
+        
+        @keyframes float4 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-20px, -25px) scale(0.9); }
+        }
+        
+        @keyframes float5 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, 15px) scale(1.3); }
+        }
+        
+        .loading-screen-hide {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.8s ease-in-out;
+        }
+    `;
+    
+    document.head.appendChild(loadingStyles);
+    document.body.appendChild(loadingScreen);
+    
+    const statusMessages = [
+        'Initialisation...',
+        'Chargement des ressources...',
+        'Préparation de l\'interface...',
+        'Finalisation...',
+        'Prêt !'
+    ];
+    
+    let messageIndex = 0;
+    const statusElement = loadingScreen.querySelector('.loading-status');
+    
+    const messageInterval = setInterval(() => {
+        if (messageIndex < statusMessages.length) {
+            statusElement.textContent = statusMessages[messageIndex];
+            messageIndex++;
+        } else {
+            clearInterval(messageInterval);
+        }
+    }, 400);
+}
+
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        loadingScreen.classList.add('loading-screen-hide');
+        setTimeout(() => {
+            loadingScreen.remove();
+        }, 800);
+    }
+}
+
