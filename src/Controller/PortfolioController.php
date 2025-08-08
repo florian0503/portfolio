@@ -44,12 +44,14 @@ final class PortfolioController extends AbstractController
         ];
 
         $skills = [
-            ['name' => 'PHP/Symfony', 'level' => 90],
-            ['name' => 'JavaScript', 'level' => 85],
-            ['name' => 'Sass', 'level' => 80],
-            ['name' => 'Twig', 'level' => 85],
-            ['name' => 'Flutter/Dart', 'level' => 75],
-            ['name' => 'Git/GitHub', 'level' => 85]
+            ['name' => 'PHP/Symfony', 'icon' => 'fab fa-php'],
+            ['name' => 'JavaScript', 'icon' => 'fab fa-js-square'],
+            ['name' => 'Sass', 'icon' => 'fab fa-sass'],
+            ['name' => 'Twig', 'icon' => 'fas fa-code'],
+            ['name' => 'Flutter/Dart', 'icon' => 'fab fa-google'],
+            ['name' => 'Git/GitHub', 'icon' => 'fab fa-github'],
+            ['name' => 'Docker', 'icon' => 'fab fa-docker'],
+            ['name' => 'MySQL', 'icon' => 'fas fa-database']
         ];
 
         return $this->render('portfolio/index.html.twig', [

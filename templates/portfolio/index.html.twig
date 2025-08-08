@@ -73,13 +73,10 @@
             <div class="skills-grid">
                 {% for skill in skills %}
                     <div class="skill-item" data-aos="zoom-in" data-aos-delay="{{ loop.index * 100 }}">
-                        <div class="skill-header">
-                            <h3>{{ skill.name }}</h3>
-                            <span class="skill-percentage">{{ skill.level }}%</span>
+                        <div class="skill-icon">
+                            <i class="{{ skill.icon }}"></i>
                         </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress-width: {{ skill.level }}%"></div>
-                        </div>
+                        <h3>{{ skill.name }}</h3>
                     </div>
                 {% endfor %}
             </div>
