@@ -61,18 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-        body.classList.add('light-theme');
-        themeIcon.className = 'fas fa-sun';
-    } else {
-        // Par défaut : mode sombre
-        body.classList.remove('light-theme');
-        themeIcon.className = 'fas fa-moon';
-        if (!savedTheme) {
-            localStorage.setItem('theme', 'dark');
-        }
-    }
+    // Force toujours le mode sombre par défaut
+    body.classList.remove('light-theme');
+    themeIcon.className = 'fas fa-moon';
+    localStorage.setItem('theme', 'dark');
     
     function toggleTheme() {
         body.classList.toggle('light-theme');

@@ -14,15 +14,23 @@
   --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
 }
 
-/* Style de base du body - Force le mode sombre par défaut */
-body {
+/* Style de base du body - Mode sombre par défaut mais respecte le light-theme */
+body:not(.light-theme) {
   background-color: #1a202c !important;
   color: #f7fafc !important;
+}
+
+body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Sections principales en mode sombre */
-body .hero, body .about, body .skills, body .projects, body .contact, body .timeline {
+/* Sections principales en mode sombre - seulement si pas en light-theme */
+body:not(.light-theme) .hero, 
+body:not(.light-theme) .about, 
+body:not(.light-theme) .skills, 
+body:not(.light-theme) .projects, 
+body:not(.light-theme) .contact, 
+body:not(.light-theme) .timeline {
   background-color: #1a202c !important;
   color: #f7fafc !important;
 }
@@ -88,6 +96,246 @@ body.light-theme .contact-form {
 body.light-theme .footer {
   background: var(--text-dark) !important;
   border-top: 1px solid rgba(102, 126, 234, 0.2) !important;
+}
+
+/* Amélioration du mode clair - corrections pour tous les éléments */
+body.light-theme {
+  background: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme .hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: #ffffff !important;
+}
+
+body.light-theme .hero .hero-content h1,
+body.light-theme .hero .hero-content .subtitle,
+body.light-theme .hero .hero-content .description {
+  color: #ffffff !important;
+}
+
+body.light-theme .about {
+  background: #f7fafc !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme .about h2,
+body.light-theme .about h3,
+body.light-theme .about h4 {
+  color: #2d3748 !important;
+}
+
+body.light-theme .about p {
+  color: #718096 !important;
+}
+
+body.light-theme .skills {
+  background: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme .skills .section-header h2 {
+  color: #2d3748 !important;
+}
+
+body.light-theme .skills .section-header p {
+  color: #718096 !important;
+}
+
+body.light-theme .skill-item {
+  background: #ffffff !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .skill-item h3 {
+  color: #2d3748 !important;
+}
+
+body.light-theme .projects {
+  background: #f7fafc !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme .projects .section-header h2 {
+  color: #2d3748 !important;
+}
+
+body.light-theme .projects .section-header p {
+  color: #718096 !important;
+}
+
+body.light-theme .project-card {
+  background: #ffffff !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .project-card h3 {
+  color: #2d3748 !important;
+}
+
+body.light-theme .project-card p {
+  color: #718096 !important;
+}
+
+body.light-theme .timeline {
+  background: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme .timeline .section-header h2 {
+  color: #2d3748 !important;
+}
+
+body.light-theme .timeline .section-header p {
+  color: #718096 !important;
+}
+
+body.light-theme .timeline-content {
+  background: #f7fafc !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme .timeline-content h3,
+body.light-theme .timeline-content h4 {
+  color: #2d3748 !important;
+}
+
+body.light-theme .timeline-content p {
+  color: #718096 !important;
+}
+
+body.light-theme .contact {
+  background: #f7fafc !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme .contact h2 {
+  color: #2d3748 !important;
+}
+
+body.light-theme .contact p {
+  color: #718096 !important;
+}
+
+body.light-theme .contact-form {
+  background: #ffffff !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.light-theme .form-group label {
+  color: #2d3748 !important;
+}
+
+body.light-theme .form-group input,
+body.light-theme .form-group textarea {
+  background: #ffffff !important;
+  color: #2d3748 !important;
+  border-color: #e2e8f0 !important;
+}
+
+body.light-theme .email-copy-container {
+  background: #f7fafc !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme .email-text {
+  color: #2d3748 !important;
+}
+
+body.light-theme .mobile-menu {
+  background: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme .mobile-nav li a {
+  color: #2d3748 !important;
+}
+
+/* FORÇAGE MODE CLAIR - Solutions pour les sections récalcitrantes */
+body.light-theme #skills,
+body.light-theme section.skills {
+  background-color: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme #timeline,
+body.light-theme section.timeline {
+  background-color: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme #contact,
+body.light-theme section.contact {
+  background-color: #f7fafc !important;
+  color: #2d3748 !important;
+}
+
+body.light-theme section.skills *,
+body.light-theme section.timeline *,
+body.light-theme section.contact * {
+  color: inherit !important;
+}
+
+body.light-theme section.skills h2,
+body.light-theme section.skills h3,
+body.light-theme section.skills h4,
+body.light-theme section.timeline h2,
+body.light-theme section.timeline h3,
+body.light-theme section.timeline h4,
+body.light-theme section.contact h2,
+body.light-theme section.contact h3,
+body.light-theme section.contact h4 {
+  color: #2d3748 !important;
+}
+
+body.light-theme section.skills p,
+body.light-theme section.timeline p,
+body.light-theme section.contact p {
+  color: #718096 !important;
+}
+
+/* Corrections supplémentaires pour l'accessibilité et la cohérence */
+body.light-theme .skill-percentage {
+  color: #667eea !important;
+}
+
+body.light-theme .see-more-btn {
+  color: #667eea !important;
+}
+
+body.light-theme .see-more-btn:hover {
+  color: #764ba2 !important;
+}
+
+body.light-theme .project-tech span {
+  background: #f7fafc !important;
+  color: #667eea !important;
+}
+
+body.light-theme .timeline-year {
+  background: #667eea !important;
+  color: #ffffff !important;
+}
+
+body.light-theme .timeline-content h4 {
+  color: #667eea !important;
+}
+
+body.light-theme .timeline-dot {
+  border-color: #ffffff !important;
+}
+
+body.light-theme .navbar .theme-toggle {
+  background: rgba(102, 126, 234, 0.1) !important;
+  border-color: rgba(102, 126, 234, 0.2) !important;
+  color: #ffffff !important;
+}
+
+body.light-theme .navbar.scrolled .theme-toggle {
+  background: rgba(102, 126, 234, 0.1) !important;
+  border-color: rgba(102, 126, 234, 0.2) !important;
+  color: #2d3748 !important;
 }
 
 /* Reset & Base Styles */
@@ -670,8 +918,11 @@ body {
 
 /* About Section */
 .about {
-  background: var(--bg-light);
   position: relative;
+}
+
+body:not(.light-theme) .about {
+  background: var(--bg-light);
 }
 
 .about-content {
@@ -795,8 +1046,11 @@ body {
 
 /* Projects Section */
 .projects {
-  background: var(--bg-light);
   position: relative;
+}
+
+body:not(.light-theme) .projects {
+  background: var(--bg-light);
 }
 
 /* Wave animation at section boundaries */
@@ -1279,6 +1533,11 @@ a:focus {
 .timeline {
   position: relative;
   padding: 5rem 0;
+}
+
+body:not(.light-theme) .timeline {
+  background: var(--bg-dark);
+  color: var(--text-dark);
 }
 
 .timeline-container {
