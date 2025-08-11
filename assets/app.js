@@ -6,35 +6,7 @@ createLoadingScreen();
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // FORCE MOBILE - Animation immédiate des barres + debug visuel
-    setTimeout(() => {
-        const skillBars = document.querySelectorAll('.skill-progress');
-        
-        
-        if (skillBars.length > 0) {
-            skillBars.forEach(bar => {
-                const skillItem = bar.closest('.skill-item');
-                const percentage = skillItem ? skillItem.querySelector('.skill-percentage').textContent : '85%';
-                bar.style.setProperty('--progress-width', percentage);
-                bar.classList.add('animate');
-                
-                // Force directement la largeur si les CSS variables ne marchent pas
-                bar.style.width = percentage;
-                bar.style.transition = 'width 1.5s ease';
-                
-                // Fix spécifique Safari - force avec !important
-                if (/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) {
-                    bar.style.cssText = `
-                        width: ${percentage} !important;
-                        transition: width 2s ease !important;
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-                        height: 100% !important;
-                        border-radius: 4px !important;
-                    `;
-                }
-            });
-        }
-    }, 1000);
+    // Removed skill bars animation - no longer needed
     
     setTimeout(() => {
         hideLoadingScreen();
@@ -124,58 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    const observerOptions = {
-        threshold: window.innerWidth <= 768 ? 0.3 : 0.7, // Seuil plus bas sur mobile
-        rootMargin: window.innerWidth <= 768 ? '0px 0px -50px 0px' : '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const skillBars = entry.target.querySelectorAll('.skill-progress');
-                skillBars.forEach(bar => {
-                    const percentage = bar.parentElement.parentElement.querySelector('.skill-percentage').textContent;
-                    bar.style.setProperty('--progress-width', percentage);
-                    bar.classList.add('animate');
-                });
-                
-                // Une fois animé, on peut arrêter d'observer
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    const skillsSection = document.querySelector('.skills');
-    if (skillsSection) {
-        observer.observe(skillsSection);
-        
-        // Fallback pour mobile : vérifier sur scroll et après 3 secondes
-        function triggerSkillsAnimation() {
-            const skillBars = skillsSection.querySelectorAll('.skill-progress');
-            const rect = skillsSection.getBoundingClientRect();
-            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-            
-            console.log('Skills section visible:', isVisible, 'Bars found:', skillBars.length);
-            
-            if (isVisible && skillBars.length > 0) {
-                skillBars.forEach((bar, index) => {
-                    if (!bar.classList.contains('animate')) {
-                        const skillItem = bar.closest('.skill-item');
-                        const percentage = skillItem ? skillItem.querySelector('.skill-percentage').textContent : '0%';
-                        console.log(`Animating bar ${index}: ${percentage}`);
-                        bar.style.setProperty('--progress-width', percentage);
-                        bar.classList.add('animate');
-                    }
-                });
-            }
-        }
-        
-        // Vérifier sur scroll
-        window.addEventListener('scroll', triggerSkillsAnimation);
-        
-        // Fallback après 3 secondes
-        setTimeout(triggerSkillsAnimation, 3000);
-    }
+    // Skill bars observer removed - no longer needed
 
     const animateOnScroll = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
